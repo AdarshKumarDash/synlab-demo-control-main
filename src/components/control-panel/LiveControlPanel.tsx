@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import { setPumpState, stopExperiment } from "@/lib/api";
+
 import {
   Square,
   Thermometer,
@@ -24,7 +26,9 @@ interface LiveControlPanelProps {
 const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [waterFlow, setWaterFlow] = useState(experiment.waterSupply);
-  const [temperatureSet, setTemperatureSet] = useState([experiment.targetTemperature]);
+  const [temperatureSet, setTemperatureSet] = useState([
+    experiment.targetTemperature,
+  ]);
   const [peltierMode, setPeltierMode] = useState(experiment.peltierMode);
 
   useEffect(() => {
@@ -40,7 +44,10 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const progress = Math.min((elapsedTime / 60 / experiment.duration) * 100, 100);
+  const progress = Math.min(
+    (elapsedTime / 60 / experiment.duration) * 100,
+    100,
+  );
 
   return (
     <div className="space-y-6">
@@ -51,10 +58,15 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
             <h2 className="text-xl font-display font-semibold text-foreground">
               {experiment.name}
             </h2>
-            <p className="text-sm text-muted-foreground">{experiment.objective}</p>
+            <p className="text-sm text-muted-foreground">
+              {experiment.objective}
+            </p>
           </div>
           <Button
-            onClick={onStop}
+            onClick={async () => {
+              await stopExperiment(); // ESP32
+              onStop(); // UI
+            }}
             variant="destructive"
             className="rounded-xl gap-2"
           >
@@ -100,7 +112,13 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
             <span className="text-sm text-foreground">
               {waterFlow ? "Flowing" : "Stopped"}
             </span>
-            <Switch checked={waterFlow} onCheckedChange={setWaterFlow} />
+            <Switch
+              checked={waterFlow}
+              onCheckedChange={async (checked) => {
+                setWaterFlow(checked);
+                await setPumpState(checked ? "on" : "off");
+              }}
+            />
           </div>
           {waterFlow && (
             <div className="mt-3 h-1 bg-muted rounded-full overflow-hidden">
@@ -116,7 +134,9 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
               <Thermometer className="w-5 h-5 text-sensor-temperature" />
             </div>
             <div>
-              <h4 className="font-medium text-foreground">Temperature Control</h4>
+              <h4 className="font-medium text-foreground">
+                Temperature Control
+              </h4>
               <p className="text-xs text-muted-foreground">
                 {peltierMode === "heating" ? "🔥 Heating" : "❄️ Cooling"}
               </p>
@@ -170,11 +190,15 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 bg-muted/50 rounded-xl text-center">
-              <span className="text-2xl font-mono text-muted-foreground">—</span>
+              <span className="text-2xl font-mono text-muted-foreground">
+                —
+              </span>
               <p className="text-xs text-muted-foreground mt-1">°C</p>
             </div>
             <div className="p-3 bg-muted/50 rounded-xl text-center">
-              <span className="text-2xl font-mono text-muted-foreground">—</span>
+              <span className="text-2xl font-mono text-muted-foreground">
+                —
+              </span>
               <p className="text-xs text-muted-foreground mt-1">%RH</p>
             </div>
           </div>
@@ -215,7 +239,9 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
             </div>
             <div>
               <h4 className="font-medium text-foreground">Load Cell</h4>
-              <p className="text-xs text-muted-foreground">Weight Measurement</p>
+              <p className="text-xs text-muted-foreground">
+                Weight Measurement
+              </p>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -247,7 +273,9 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
           </div>
           <div className="space-y-2">
             <div className="text-center p-3 bg-muted/50 rounded-xl">
-              <span className="text-3xl font-mono text-muted-foreground">—</span>
+              <span className="text-3xl font-mono text-muted-foreground">
+                —
+              </span>
               <p className="text-xs text-muted-foreground mt-1">pH Value</p>
             </div>
             <div className="h-2 rounded-full bg-gradient-to-r from-status-error via-status-active to-primary" />
@@ -274,7 +302,9 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
             <div className="flex-1 h-24 bg-muted/50 rounded-xl relative overflow-hidden border-2 border-border">
               <div className="absolute bottom-0 left-0 right-0 h-0 bg-sensor-water/30 transition-all" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-mono text-muted-foreground">—</span>
+                <span className="text-2xl font-mono text-muted-foreground">
+                  —
+                </span>
               </div>
             </div>
             <div className="text-xs text-muted-foreground space-y-1">
@@ -321,7 +351,9 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
           <div className="flex items-center gap-3">
             <AlertTriangle className="w-5 h-5 text-accent" />
             <div>
-              <h4 className="font-medium text-foreground">Safety Monitoring Active</h4>
+              <h4 className="font-medium text-foreground">
+                Safety Monitoring Active
+              </h4>
               <p className="text-sm text-muted-foreground">
                 Monitoring:{" "}
                 {[

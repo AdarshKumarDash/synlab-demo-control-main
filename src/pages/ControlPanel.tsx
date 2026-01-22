@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { startExperiment } from "@/lib/api";
+
 import {
   ArrowLeft,
   User,
@@ -39,13 +41,22 @@ export interface ExperimentConfig {
 
 const ControlPanel = () => {
   const navigate = useNavigate();
-  const [experimentStatus, setExperimentStatus] = useState<"idle" | "running">("idle");
+  const [experimentStatus, setExperimentStatus] = useState<"idle" | "running">(
+    "idle",
+  );
   const [showExperimentForm, setShowExperimentForm] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showSynBot, setShowSynBot] = useState(false);
-  const [currentExperiment, setCurrentExperiment] = useState<ExperimentConfig | null>(null);
+  const [currentExperiment, setCurrentExperiment] =
+    useState<ExperimentConfig | null>(null);
 
-  const handleStartExperiment = (config: ExperimentConfig) => {
+  const handleStartExperiment = async (config: ExperimentConfig) => {
+    await startExperiment({
+      name: config.name,
+      temp: config.targetTemperature,
+      duration: config.duration,
+    });
+
     setCurrentExperiment(config);
     setExperimentStatus("running");
     setShowExperimentForm(false);
@@ -75,12 +86,20 @@ const ControlPanel = () => {
           <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-muted/50 border border-border/50">
             <span
               className={`status-dot ${
-                experimentStatus === "running" ? "status-running" : "status-idle"
+                experimentStatus === "running"
+                  ? "status-running"
+                  : "status-idle"
               }`}
             />
             <span className="text-sm font-medium text-foreground">
               Experiment Status:{" "}
-              <span className={experimentStatus === "running" ? "text-primary" : "text-status-idle"}>
+              <span
+                className={
+                  experimentStatus === "running"
+                    ? "text-primary"
+                    : "text-status-idle"
+                }
+              >
                 {experimentStatus === "running" ? "Running" : "Idle"}
               </span>
             </span>
@@ -96,7 +115,9 @@ const ControlPanel = () => {
                 <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center">
                   <User className="w-4 h-4 text-primary-foreground" />
                 </div>
-                <span className="font-medium text-foreground hidden sm:block">Adarsh</span>
+                <span className="font-medium text-foreground hidden sm:block">
+                  Adarsh
+                </span>
                 <ChevronDown className="w-4 h-4 text-muted-foreground" />
               </Button>
             </DropdownMenuTrigger>
@@ -105,7 +126,10 @@ const ControlPanel = () => {
                 <User className="w-4 h-4 mr-2" />
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/")} className="cursor-pointer rounded-lg">
+              <DropdownMenuItem
+                onClick={() => navigate("/")}
+                className="cursor-pointer rounded-lg"
+              >
                 Back to Dashboard
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -163,7 +187,9 @@ const ControlPanel = () => {
       >
         <Sparkles className="w-6 h-6 text-primary-foreground" />
         <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-accent flex items-center justify-center">
-          <span className="text-[10px] text-accent-foreground font-bold">AI</span>
+          <span className="text-[10px] text-accent-foreground font-bold">
+            AI
+          </span>
         </span>
       </button>
 
@@ -176,7 +202,10 @@ const ControlPanel = () => {
         onOpenChange={setShowExperimentForm}
         onStart={handleStartExperiment}
       />
-      <ExperimentHistoryModal open={showHistory} onOpenChange={setShowHistory} />
+      <ExperimentHistoryModal
+        open={showHistory}
+        onOpenChange={setShowHistory}
+      />
       <SynBotAssistant open={showSynBot} onOpenChange={setShowSynBot} />
     </div>
   );
