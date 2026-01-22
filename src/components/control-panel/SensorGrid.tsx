@@ -5,6 +5,7 @@ import {
   Waves,
   Radar,
   Microscope,
+  Sprout, //Soil
 } from "lucide-react";
 import { useSensors } from "@/hooks/useSensors";
 
@@ -50,7 +51,12 @@ const SensorGrid = () => {
       id: "temperature",
       name: "Temperature (DHT11)",
       icon: Thermometer,
-      status: data?.temperature !== undefined ? "active" : online ? "inactive" : "not-connected",
+      status:
+        data?.temperature !== undefined
+          ? "active"
+          : online
+            ? "inactive"
+            : "not-connected",
       value: data?.temperature !== undefined ? `${data.temperature} °C` : "—",
       colorClass: "text-sensor-temperature",
       bgColorClass: "bg-sensor-temperature/10",
@@ -59,7 +65,12 @@ const SensorGrid = () => {
       id: "humidity",
       name: "Humidity (DHT11)",
       icon: Droplets,
-      status: data?.humidity !== undefined ? "active" : online ? "inactive" : "not-connected",
+      status:
+        data?.humidity !== undefined
+          ? "active"
+          : online
+            ? "inactive"
+            : "not-connected",
       value: data?.humidity !== undefined ? `${data.humidity} %` : "—",
       colorClass: "text-sensor-humidity",
       bgColorClass: "bg-sensor-humidity/10",
@@ -68,7 +79,12 @@ const SensorGrid = () => {
       id: "gas",
       name: "Gas / AQI (MQ135)",
       icon: Wind,
-      status: data?.gas !== undefined ? "active" : online ? "inactive" : "not-connected",
+      status:
+        data?.gas !== undefined
+          ? "active"
+          : online
+            ? "inactive"
+            : "not-connected",
       value: data?.gas !== undefined ? `${data.gas}` : "—",
       colorClass: "text-sensor-gas",
       bgColorClass: "bg-sensor-gas/10",
@@ -77,16 +93,40 @@ const SensorGrid = () => {
       id: "water",
       name: "Water Level",
       icon: Waves,
-      status: data?.water !== undefined ? "active" : online ? "inactive" : "not-connected",
+      status:
+        data?.water !== undefined
+          ? "active"
+          : online
+            ? "inactive"
+            : "not-connected",
       value: data?.water !== undefined ? `${data.water}` : "—",
       colorClass: "text-sensor-water",
       bgColorClass: "bg-sensor-water/10",
     },
     {
+      id: "soil",
+      name: "Soil Moisture",
+      icon: Sprout,
+      status:
+        data?.soil !== undefined
+          ? "active"
+          : online
+            ? "inactive"
+            : "not-connected",
+      value: data?.soil !== undefined ? `${data.soil}` : "—",
+      colorClass: "text-sensor-soil",
+      bgColorClass: "bg-sensor-soil/10",
+    },
+    {
       id: "distance",
       name: "Ultrasonic Distance",
       icon: Radar,
-      status: data?.distance !== undefined ? "active" : online ? "inactive" : "not-connected",
+      status:
+        data?.distance !== undefined
+          ? "active"
+          : online
+            ? "inactive"
+            : "not-connected",
       value: data?.distance !== undefined ? `${data.distance} cm` : "—",
       colorClass: "text-sensor-distance",
       bgColorClass: "bg-sensor-distance/10",
@@ -126,9 +166,7 @@ const SensorGrid = () => {
               <sensor.icon className={`w-6 h-6 ${sensor.colorClass}`} />
             </div>
 
-            <h3 className="font-medium text-foreground mb-1">
-              {sensor.name}
-            </h3>
+            <h3 className="font-medium text-foreground mb-1">{sensor.name}</h3>
 
             <div className="flex items-center gap-2 mb-3">
               <span className={`status-dot ${getStatusClass(sensor.status)}`} />
