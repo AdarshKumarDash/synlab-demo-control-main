@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { setPumpState, stopExperiment } from "@/lib/api";
+import { useSensors } from "@/hooks/useSensors";
+
 
 import {
   Square,
@@ -24,6 +26,7 @@ interface LiveControlPanelProps {
 }
 
 const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
+  const { data, online } = useSensors();
   const [elapsedTime, setElapsedTime] = useState(0);
   const [waterFlow, setWaterFlow] = useState(experiment.waterSupply);
   const [temperatureSet, setTemperatureSet] = useState([
@@ -190,15 +193,16 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 bg-muted/50 rounded-xl text-center">
-              <span className="text-2xl font-mono text-muted-foreground">
-                —
+              <span className="text-2xl font-mono text-foreground">
+                {data?.temperature !== undefined ? data.temperature : "—"}
               </span>
               <p className="text-xs text-muted-foreground mt-1">°C</p>
             </div>
             <div className="p-3 bg-muted/50 rounded-xl text-center">
-              <span className="text-2xl font-mono text-muted-foreground">
-                —
+              <span className="text-2xl font-mono text-foreground">
+                {data?.humidity !== undefined ? data.humidity : "—"}
               </span>
+
               <p className="text-xs text-muted-foreground mt-1">%RH</p>
             </div>
           </div>
@@ -302,8 +306,8 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
             <div className="flex-1 h-24 bg-muted/50 rounded-xl relative overflow-hidden border-2 border-border">
               <div className="absolute bottom-0 left-0 right-0 h-0 bg-sensor-water/30 transition-all" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-mono text-muted-foreground">
-                  —
+                <span className="font-mono text-foreground">
+                  {data?.gas !== undefined ? data.gas : "—"}
                 </span>
               </div>
             </div>
@@ -338,7 +342,11 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
             </div>
           </div>
           <p className="text-center text-sm text-muted-foreground mt-2">
-            Distance: <span className="font-mono">—</span> cm
+            Distance:{" "}
+            <span className="font-mono">
+              {data?.distance !== undefined ? data.distance : "—"}
+            </span>{" "}
+            cm
           </p>
         </div>
       </div>

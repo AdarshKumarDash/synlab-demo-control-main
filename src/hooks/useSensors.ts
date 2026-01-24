@@ -3,12 +3,12 @@ import { fetchSensorData } from "@/lib/api";
 
 /* ================= TYPES ================= */
 export interface SensorData {
-  temperature: number;
-  humidity: number;
-  gas: number;
-  soil: number;
-  water: number;
-  distance: number;
+  temperature?: number;
+  humidity?: number;
+  gas?: number;
+  soil?: number;
+  water?: number;
+  distance?: number;
   emergency: boolean;
 }
 
@@ -25,7 +25,13 @@ export function useSensors() {
         const result = await fetchSensorData();
         if (!mounted) return;
 
-        setData(result);
+        setData({
+          temperature: result.temperature ?? undefined,
+          humidity: result.humidity ?? undefined,
+          gas: result.gas ?? 0,
+          emergency: result.emergency ?? false,
+        });
+
         setOnline(true);
       } catch {
         if (!mounted) return;

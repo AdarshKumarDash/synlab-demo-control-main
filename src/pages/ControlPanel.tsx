@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { startExperiment } from "@/lib/api";
+// Add this after your useState declarations
+import { useEffect } from "react";
 
 import {
   ArrowLeft,
@@ -44,11 +46,31 @@ const ControlPanel = () => {
   const [experimentStatus, setExperimentStatus] = useState<"idle" | "running">(
     "idle",
   );
+
   const [showExperimentForm, setShowExperimentForm] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showSynBot, setShowSynBot] = useState(false);
   const [currentExperiment, setCurrentExperiment] =
     useState<ExperimentConfig | null>(null);
+
+  useEffect(() => {
+    if (!currentExperiment || experimentStatus === "idle") return;
+
+    const durationSeconds = currentExperiment.duration * 60; // total duration in seconds
+    let elapsed = 0;
+
+    const timer = setInterval(() => {
+      elapsed += 1;
+
+      if (elapsed >= durationSeconds) {
+        // Auto-stop experiment in UI
+        setExperimentStatus("idle");
+        setCurrentExperiment(null);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [currentExperiment, experimentStatus]);
 
   const handleStartExperiment = async (config: ExperimentConfig) => {
     await startExperiment({
@@ -162,12 +184,14 @@ const ControlPanel = () => {
         {/* Content Grid */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Left: Sensor Grid or Live Controls */}
-          <div className="xl:col-span-2">
-            {experimentStatus === "idle" ? (
-              <SensorGrid />
-            ) : (
+          <div className="xl:col-span-2 space-y-6">
+            {/* Sensors ALWAYS visible */}
+            <SensorGrid />
+
+            {/* Live controls ONLY when running */}
+            {experimentStatus === "running" && currentExperiment && (
               <LiveControlPanel
-                experiment={currentExperiment!}
+                experiment={currentExperiment}
                 onStop={handleStopExperiment}
               />
             )}

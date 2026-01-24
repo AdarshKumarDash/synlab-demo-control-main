@@ -2,15 +2,23 @@ const ESP32_BASE_URL = "http://192.168.4.1";
 
 /* ================= SENSOR DATA ================= */
 export async function fetchSensorData() {
-  const res = await fetch(`${ESP32_BASE_URL}/data`, {
-    cache: "no-store",
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3000);
 
-  if (!res.ok) {
-    throw new Error("ESP32 not reachable");
+  try {
+    const res = await fetch(`${ESP32_BASE_URL}/data`, {
+      cache: "no-store",
+      signal: controller.signal,
+    });
+
+    if (!res.ok) {
+      throw new Error("ESP32 not reachable");
+    }
+
+    return await res.json();
+  } finally {
+    clearTimeout(timeout);
   }
-
-  return res.json();
 }
 
 /* ================= EXPERIMENT ================= */
@@ -26,7 +34,10 @@ export async function startExperiment(payload: {
 
   const res = await fetch(`${ESP32_BASE_URL}/start`, {
     method: "POST",
-    body: params,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: params.toString(),
   });
 
   if (!res.ok) {

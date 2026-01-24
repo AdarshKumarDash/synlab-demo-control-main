@@ -51,30 +51,32 @@ const SensorGrid = () => {
       id: "temperature",
       name: "Temperature (DHT11)",
       icon: Thermometer,
-      status:
+      status: online ? "active" : "not-connected",
+      value:
         data?.temperature !== undefined
-          ? "active"
+          ? `${data.temperature} °C`
           : online
-            ? "inactive"
-            : "not-connected",
-      value: data?.temperature !== undefined ? `${data.temperature} °C` : "—",
+            ? "Reading..."
+            : "—",
       colorClass: "text-sensor-temperature",
       bgColorClass: "bg-sensor-temperature/10",
     },
+
     {
       id: "humidity",
       name: "Humidity (DHT11)",
       icon: Droplets,
-      status:
+      status: online ? "active" : "not-connected",
+      value:
         data?.humidity !== undefined
-          ? "active"
+          ? `${data.humidity} %`
           : online
-            ? "inactive"
-            : "not-connected",
-      value: data?.humidity !== undefined ? `${data.humidity} %` : "—",
+            ? "Reading..."
+            : "—",
       colorClass: "text-sensor-humidity",
       bgColorClass: "bg-sensor-humidity/10",
     },
+
     {
       id: "gas",
       name: "Gas / AQI (MQ135)",
