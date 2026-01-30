@@ -29,6 +29,9 @@ export function useSensors() {
           temperature: result.temperature ?? undefined,
           humidity: result.humidity ?? undefined,
           gas: result.gas ?? 0,
+          soil: result.soil ?? 0,
+          water: result.water ?? 0,
+          distance: result.distance ?? -1,
           emergency: result.emergency ?? false,
         });
 
