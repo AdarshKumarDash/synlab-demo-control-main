@@ -87,7 +87,8 @@ const SensorGrid = () => {
           : online
             ? "inactive"
             : "not-connected",
-      value: data?.gas !== undefined ? `${data.gas}` : "—",
+      value: online ? `${data?.gas ?? 0}` : "—",
+
       colorClass: "text-sensor-gas",
       bgColorClass: "bg-sensor-gas/10",
     },
