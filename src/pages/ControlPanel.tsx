@@ -4,6 +4,16 @@ import { startExperiment } from "@/lib/api";
 // Add this after your useState declarations
 import { useEffect } from "react";
 
+import { askGemini } from "@/ai/gemini";
+
+const test = async () => {
+  const res = await askGemini("Say hello from Cognix.");
+
+  console.log(res);
+};
+
+test();
+
 import {
   ArrowLeft,
   User,

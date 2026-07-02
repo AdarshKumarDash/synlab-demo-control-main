@@ -5,7 +5,6 @@ import { Switch } from "@/components/ui/switch";
 import { setPumpState, stopExperiment } from "@/lib/api";
 import { useSensors } from "@/hooks/useSensors";
 
-
 import {
   Square,
   Thermometer,
@@ -222,7 +221,9 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">AQI Level</span>
-              <span className="font-mono text-muted-foreground">—</span>
+              <span className="font-mono text-foreground">
+                {data?.gas ?? 0}
+              </span>
             </div>
             <div className="h-3 bg-muted rounded-full overflow-hidden">
               <div className="h-full w-0 bg-gradient-to-r from-status-active via-status-idle to-status-error rounded-full" />
@@ -248,23 +249,15 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
               </p>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 bg-muted/50 rounded-xl text-center">
-              <span className="text-lg font-mono text-muted-foreground">—</span>
-              <p className="text-xs text-muted-foreground mt-1">Cell 1 (g)</p>
-            </div>
-            <div className="p-3 bg-muted/50 rounded-xl text-center">
-              <span className="text-lg font-mono text-muted-foreground">—</span>
-              <p className="text-xs text-muted-foreground mt-1">Cell 2 (g)</p>
-            </div>
-          </div>
-          <div className="mt-2 p-2 bg-primary/5 rounded-lg text-center">
-            <span className="text-xs text-muted-foreground">Total: </span>
-            <span className="font-mono text-foreground">—</span>
+          <div className="p-4 bg-muted/50 rounded-xl text-center">
+            <span className="text-3xl font-mono text-foreground">
+              {data?.weight !== undefined ? data.weight.toFixed(2) : "—"}
+            </span>
+            <p className="text-xs text-muted-foreground mt-1">Weight (g)</p>
           </div>
         </div>
 
-        {/* pH Sensor */}
+        {/* pH Sensor
         <div className="sensor-card">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-sensor-ph/10 flex items-center justify-center">
@@ -289,7 +282,7 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
               <span>14 (Base)</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Water Level Tank */}
         <div className="sensor-card">
@@ -307,7 +300,7 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
               <div className="absolute bottom-0 left-0 right-0 h-0 bg-sensor-water/30 transition-all" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="font-mono text-foreground">
-                  {data?.gas !== undefined ? data.gas : "—"}
+                  {data?.water !== undefined ? data.water : "—"} cm
                 </span>
               </div>
             </div>

@@ -51,5 +51,7 @@ export async function stopExperiment() {
 
 /* ================= WATER PUMP ================= */
 export async function setPumpState(state: "on" | "off") {
+  console.log("Pump request:", state);
+
   await fetch(`${ESP32_BASE_URL}/pump?state=${state}`);
 }

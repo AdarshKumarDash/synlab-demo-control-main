@@ -9,6 +9,7 @@ export interface SensorData {
   soil?: number;
   water?: number;
   distance?: number;
+  weight?: number;
   emergency: boolean;
 }
 
@@ -32,6 +33,7 @@ export function useSensors() {
           soil: result.soil ?? 0,
           water: result.water ?? 0,
           distance: result.distance ?? -1,
+          weight: result.weight ?? 0,
           emergency: result.emergency ?? false,
         });
 
