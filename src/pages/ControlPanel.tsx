@@ -5,6 +5,7 @@ import { startExperiment } from "@/lib/api";
 import { useEffect } from "react";
 
 import { askGemini } from "@/ai/gemini";
+import { Globe } from "lucide-react";
 
 const test = async () => {
   const res = await askGemini("Say hello from Cognix.");
@@ -34,6 +35,7 @@ import LiveControlPanel from "@/components/control-panel/LiveControlPanel";
 import ExperimentFormModal from "@/components/control-panel/ExperimentFormModal";
 import ExperimentHistoryModal from "@/components/control-panel/ExperimentHistoryModal";
 import USBMicroscopePanel from "@/components/control-panel/USBMicroscopePanel";
+import PendulumPanel from "@/components/PendulumPanel";
 import SynBotAssistant from "@/components/SynBotAssistant";
 import Footer from "@/components/Footer";
 
@@ -189,6 +191,14 @@ const ControlPanel = () => {
             <FolderOpen className="w-5 h-5" />
             Experiment History
           </Button>
+          <Button
+            onClick={() => navigate("/environment")}
+            variant="outline"
+            className="control-btn border-2 border-border gap-3"
+          >
+            <Globe className="w-5 h-5" />
+            Environmental Station
+          </Button>
         </div>
 
         {/* Content Grid */}
@@ -209,7 +219,7 @@ const ControlPanel = () => {
 
           {/* Right: USB Microscope */}
           <div className="xl:col-span-1">
-            <USBMicroscopePanel />
+            <PendulumPanel />
           </div>
         </div>
       </main>

@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import ControlPanel from "./pages/ControlPanel";
 import NotFound from "./pages/NotFound";
+import PendulumLab from "./pages/PendulumLab";
+import EnvironmentalStation from "./pages/EnvironmentalStation";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +20,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/control-panel" element={<ControlPanel />} />
+          <Route path="/environment" element={<EnvironmentalStation />} />
+          <Route path="/pendulum" element={<PendulumLab />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

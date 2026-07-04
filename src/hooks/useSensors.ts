@@ -10,6 +10,11 @@ export interface SensorData {
   water?: number;
   distance?: number;
   weight?: number;
+
+  oscillations?: number;
+  frequency?: number;
+  period?: number;
+
   emergency: boolean;
 }
 
@@ -34,6 +39,11 @@ export function useSensors() {
           water: result.water ?? 0,
           distance: result.distance ?? -1,
           weight: result.weight ?? 0,
+
+          oscillations: result.oscillations ?? 0,
+          period: result.period ?? 0,
+          frequency: result.frequency ?? 0,
+
           emergency: result.emergency ?? false,
         });
 

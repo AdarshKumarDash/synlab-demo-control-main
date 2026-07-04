@@ -1,0 +1,1 @@
+export const PENDULUM_LENGTH = 1.45;
