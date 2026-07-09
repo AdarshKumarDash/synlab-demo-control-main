@@ -15,6 +15,12 @@ export interface SensorData {
   frequency?: number;
   period?: number;
 
+  potValue?: number;
+  potVoltage?: number;
+  red?: number;
+  green?: number;
+  blue?: number;
+
   emergency: boolean;
 }
 
@@ -43,6 +49,13 @@ export function useSensors() {
           oscillations: result.oscillations ?? 0,
           period: result.period ?? 0,
           frequency: result.frequency ?? 0,
+
+          potValue: result.potValue ?? 0,
+          potVoltage: result.potVoltage ?? 0,
+
+          red: result.red ?? 0,
+          green: result.green ?? 0,
+          blue: result.blue ?? 0,
 
           emergency: result.emergency ?? false,
         });

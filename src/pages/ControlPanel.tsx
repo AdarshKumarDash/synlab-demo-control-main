@@ -6,6 +6,8 @@ import { useEffect } from "react";
 
 import { askGemini } from "@/ai/gemini";
 import { Globe } from "lucide-react";
+import RGBVisualizer from "@/components/control-panel/RGBVisualizer";
+import { useSensors } from "@/hooks/useSensors";
 
 const test = async () => {
   const res = await askGemini("Say hello from Cognix.");
@@ -42,19 +44,43 @@ import Footer from "@/components/Footer";
 export interface ExperimentConfig {
   name: string;
   objective: string;
+
   duration: number;
   targetTemperature: number;
+
   waterSupply: boolean;
+
   peltierMode: "heating" | "cooling";
+
   safetyMonitoring: {
     gas: boolean;
     temperature: boolean;
     waterLevel: boolean;
   };
+
+  generateAIReport: boolean;
+
+  researchQuestion: string;
+
+  hypothesis: string;
+
+  materials: string;
+
+  procedure: string;
+
+  expectedOutcome: string;
 }
 
 const ControlPanel = () => {
   const navigate = useNavigate();
+  const { data } = useSensors();
+
+  const [graphData, setGraphData] = useState<
+    {
+      time: string;
+      voltage: number;
+    }[]
+  >([]);
   const [experimentStatus, setExperimentStatus] = useState<"idle" | "running">(
     "idle",
   );
@@ -83,6 +109,18 @@ const ControlPanel = () => {
 
     return () => clearInterval(timer);
   }, [currentExperiment, experimentStatus]);
+
+  useEffect(() => {
+    if (data?.potVoltage === undefined) return;
+
+    setGraphData((prev) => [
+      ...prev.slice(-29),
+      {
+        time: new Date().toLocaleTimeString(),
+        voltage: data.potVoltage,
+      },
+    ]);
+  }, [data?.potVoltage]);
 
   const handleStartExperiment = async (config: ExperimentConfig) => {
     await startExperiment({
@@ -205,16 +243,16 @@ const ControlPanel = () => {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Left: Sensor Grid or Live Controls */}
           <div className="xl:col-span-2 space-y-6">
-            {/* Sensors ALWAYS visible */}
             <SensorGrid />
 
-            {/* Live controls ONLY when running */}
             {experimentStatus === "running" && currentExperiment && (
               <LiveControlPanel
                 experiment={currentExperiment}
                 onStop={handleStopExperiment}
               />
             )}
+
+            <RGBVisualizer />
           </div>
 
           {/* Right: USB Microscope */}

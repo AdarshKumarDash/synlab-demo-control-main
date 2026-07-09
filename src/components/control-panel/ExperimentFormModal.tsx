@@ -17,7 +17,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Play, X, Thermometer, Droplets, Wind, Waves, FlaskConical } from "lucide-react";
+import {
+  Play,
+  X,
+  Thermometer,
+  Droplets,
+  Wind,
+  Waves,
+  FlaskConical,
+} from "lucide-react";
 import type { ExperimentConfig } from "@/pages/ControlPanel";
 
 interface ExperimentFormModalProps {
@@ -26,13 +34,31 @@ interface ExperimentFormModalProps {
   onStart: (config: ExperimentConfig) => void;
 }
 
-const ExperimentFormModal = ({ open, onOpenChange, onStart }: ExperimentFormModalProps) => {
+const ExperimentFormModal = ({
+  open,
+  onOpenChange,
+  onStart,
+}: ExperimentFormModalProps) => {
   const [name, setName] = useState("");
   const [objective, setObjective] = useState("");
   const [duration, setDuration] = useState([15]);
   const [targetTemperature, setTargetTemperature] = useState([25]);
   const [waterSupply, setWaterSupply] = useState(false);
-  const [peltierMode, setPeltierMode] = useState<"heating" | "cooling">("heating");
+  const [enableAI, setEnableAI] = useState(false);
+
+  const [researchQuestion, setResearchQuestion] = useState("");
+
+  const [hypothesis, setHypothesis] = useState("");
+
+  const [materials, setMaterials] = useState("");
+
+  const [procedure, setProcedure] = useState("");
+
+  const [expectedOutcome, setExpectedOutcome] = useState("");
+
+  const [peltierMode, setPeltierMode] = useState<"heating" | "cooling">(
+    "heating",
+  );
   const [safetyMonitoring, setSafetyMonitoring] = useState({
     gas: true,
     temperature: true,
@@ -43,11 +69,21 @@ const ExperimentFormModal = ({ open, onOpenChange, onStart }: ExperimentFormModa
     const config: ExperimentConfig = {
       name,
       objective,
+
       duration: duration[0],
       targetTemperature: targetTemperature[0],
+
       waterSupply,
       peltierMode,
       safetyMonitoring,
+
+      generateAIReport: enableAI,
+
+      researchQuestion,
+      hypothesis,
+      materials,
+      procedure,
+      expectedOutcome,
     };
     onStart(config);
     // Reset form
@@ -56,6 +92,17 @@ const ExperimentFormModal = ({ open, onOpenChange, onStart }: ExperimentFormModa
     setDuration([15]);
     setTargetTemperature([25]);
     setWaterSupply(false);
+    setEnableAI(false);
+
+    setResearchQuestion("");
+
+    setHypothesis("");
+
+    setMaterials("");
+
+    setProcedure("");
+
+    setExpectedOutcome("");
     setPeltierMode("heating");
     setSafetyMonitoring({ gas: true, temperature: true, waterLevel: true });
   };
@@ -162,7 +209,12 @@ const ExperimentFormModal = ({ open, onOpenChange, onStart }: ExperimentFormModa
 
             <div className="p-4 rounded-xl bg-muted/50 border border-border/50 space-y-3">
               <Label className="text-sm font-medium">Peltier Mode</Label>
-              <Select value={peltierMode} onValueChange={(v) => setPeltierMode(v as "heating" | "cooling")}>
+              <Select
+                value={peltierMode}
+                onValueChange={(v) =>
+                  setPeltierMode(v as "heating" | "cooling")
+                }
+              >
                 <SelectTrigger className="rounded-xl">
                   <SelectValue />
                 </SelectTrigger>
@@ -173,6 +225,76 @@ const ExperimentFormModal = ({ open, onOpenChange, onStart }: ExperimentFormModa
               </Select>
             </div>
           </div>
+
+          {/* AI Laboratory Assistant */}
+          <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold">🧠 AI Laboratory Assistant</h3>
+
+                <p className="text-xs text-muted-foreground">
+                  Generate automatic experiment analysis, conclusions and
+                  recommendations.
+                </p>
+              </div>
+
+              <Switch checked={enableAI} onCheckedChange={setEnableAI} />
+            </div>
+          </div>
+
+          {enableAI && (
+            <div className="space-y-4 p-4 rounded-xl border bg-muted/20">
+              <div>
+                <Label>Research Question</Label>
+
+                <Input
+                  value={researchQuestion}
+                  onChange={(e) => setResearchQuestion(e.target.value)}
+                  placeholder="What are you investigating?"
+                />
+              </div>
+
+              <div>
+                <Label>Hypothesis</Label>
+
+                <Input
+                  value={hypothesis}
+                  onChange={(e) => setHypothesis(e.target.value)}
+                  placeholder="Expected scientific outcome"
+                />
+              </div>
+
+              <div>
+                <Label>Materials Used</Label>
+
+                <Input
+                  value={materials}
+                  onChange={(e) => setMaterials(e.target.value)}
+                  placeholder="Water, Beaker, Sensor..."
+                />
+              </div>
+
+              <div>
+                <Label>Procedure</Label>
+
+                <Input
+                  value={procedure}
+                  onChange={(e) => setProcedure(e.target.value)}
+                  placeholder="Steps followed"
+                />
+              </div>
+
+              <div>
+                <Label>Expected Outcome</Label>
+
+                <Input
+                  value={expectedOutcome}
+                  onChange={(e) => setExpectedOutcome(e.target.value)}
+                  placeholder="Expected result"
+                />
+              </div>
+            </div>
+          )}
 
           {/* Safety Monitoring */}
           <div className="p-4 rounded-xl bg-accent-soft border border-accent/20 space-y-4">
