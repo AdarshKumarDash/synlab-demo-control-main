@@ -6,6 +6,7 @@ import {
   Radar,
   Microscope,
   Sprout, //Soil
+  ScanSearch,
 } from "lucide-react";
 import { useSensors } from "@/hooks/useSensors";
 
@@ -58,6 +59,28 @@ const SensorGrid = () => {
           : online
             ? "Reading..."
             : "—",
+      colorClass: "text-sensor-temperature",
+      bgColorClass: "bg-sensor-temperature/10",
+    },
+
+    {
+      id: "objectTemp",
+      name: "Object Temp (MLX90614)",
+      icon: ScanSearch,
+      status:
+        data?.objectTemp !== undefined
+          ? "active"
+          : online
+            ? "inactive"
+            : "not-connected",
+
+      value:
+        data?.objectTemp !== undefined
+          ? `${data.objectTemp.toFixed(1)} °C`
+          : online
+            ? "Reading..."
+            : "—",
+
       colorClass: "text-sensor-temperature",
       bgColorClass: "bg-sensor-temperature/10",
     },
