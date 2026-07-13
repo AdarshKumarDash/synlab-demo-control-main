@@ -166,6 +166,25 @@ const SensorGrid = () => {
       colorClass: "text-sensor-microscope",
       bgColorClass: "bg-sensor-microscope/10",
     },
+    {
+      id: "mlx",
+      name: "Object Temperature",
+      icon: ScanSearch,
+      status:
+        data?.objectTemp !== undefined
+          ? "active"
+          : online
+            ? "inactive"
+            : "not-connected",
+
+      value:
+        data?.objectTemp !== undefined
+          ? `${data.objectTemp.toFixed(1)} °C`
+          : "—",
+
+      colorClass: "text-orange-500",
+      bgColorClass: "bg-orange-500/10",
+    },
   ];
 
   return (

@@ -46,11 +46,9 @@ export interface ExperimentConfig {
   objective: string;
 
   duration: number;
-  targetTemperature: number;
+  heaterTemperature: number;
 
   waterSupply: boolean;
-
-  peltierMode: "heating" | "cooling";
 
   safetyMonitoring: {
     gas: boolean;
@@ -61,13 +59,9 @@ export interface ExperimentConfig {
   generateAIReport: boolean;
 
   researchQuestion: string;
-
   hypothesis: string;
-
   materials: string;
-
   procedure: string;
-
   expectedOutcome: string;
 }
 
@@ -125,7 +119,7 @@ const ControlPanel = () => {
   const handleStartExperiment = async (config: ExperimentConfig) => {
     await startExperiment({
       name: config.name,
-      temp: config.targetTemperature,
+      temp: config.heaterTemperature,
       duration: config.duration,
     });
 

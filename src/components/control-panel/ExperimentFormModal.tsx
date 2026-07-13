@@ -11,13 +11,6 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Play,
   X,
   Thermometer,
@@ -55,10 +48,6 @@ const ExperimentFormModal = ({
   const [procedure, setProcedure] = useState("");
 
   const [expectedOutcome, setExpectedOutcome] = useState("");
-
-  const [peltierMode, setPeltierMode] = useState<"heating" | "cooling">(
-    "heating",
-  );
   const [safetyMonitoring, setSafetyMonitoring] = useState({
     gas: true,
     temperature: true,
@@ -71,10 +60,9 @@ const ExperimentFormModal = ({
       objective,
 
       duration: duration[0],
-      targetTemperature: targetTemperature[0],
+      heaterTemperature: targetTemperature[0],
 
       waterSupply,
-      peltierMode,
       safetyMonitoring,
 
       generateAIReport: enableAI,
@@ -103,7 +91,6 @@ const ExperimentFormModal = ({
     setProcedure("");
 
     setExpectedOutcome("");
-    setPeltierMode("heating");
     setSafetyMonitoring({ gas: true, temperature: true, waterLevel: true });
   };
 
@@ -168,12 +155,12 @@ const ExperimentFormModal = ({
             />
           </div>
 
-          {/* Target Temperature */}
+          {/* Induction Heater Temperature */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="text-sm font-medium flex items-center gap-2">
                 <Thermometer className="w-4 h-4 text-sensor-temperature" />
-                Target Temperature
+                Induction Heater Temperature
               </Label>
               <span className="text-sm text-sensor-temperature font-mono font-medium">
                 {targetTemperature[0]}°C
@@ -182,8 +169,8 @@ const ExperimentFormModal = ({
             <Slider
               value={targetTemperature}
               onValueChange={setTargetTemperature}
-              min={2}
-              max={50}
+              min={50}
+              max={350}
               step={1}
               className="w-full"
             />
@@ -205,24 +192,6 @@ const ExperimentFormModal = ({
                   {waterSupply ? "ON" : "OFF"}
                 </span>
               </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-muted/50 border border-border/50 space-y-3">
-              <Label className="text-sm font-medium">Peltier Mode</Label>
-              <Select
-                value={peltierMode}
-                onValueChange={(v) =>
-                  setPeltierMode(v as "heating" | "cooling")
-                }
-              >
-                <SelectTrigger className="rounded-xl">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="heating">🔥 Heating</SelectItem>
-                  <SelectItem value="cooling">❄️ Cooling</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
           </div>
 

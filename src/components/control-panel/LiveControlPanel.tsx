@@ -29,9 +29,8 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [waterFlow, setWaterFlow] = useState(experiment.waterSupply);
   const [temperatureSet, setTemperatureSet] = useState([
-    experiment.targetTemperature,
+    experiment.heaterTemperature,
   ]);
-  const [peltierMode, setPeltierMode] = useState(experiment.peltierMode);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -136,17 +135,12 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
               <Thermometer className="w-5 h-5 text-sensor-temperature" />
             </div>
             <div>
-              <h4 className="font-medium text-foreground">
-                Temperature Control
-              </h4>
-              <p className="text-xs text-muted-foreground">
-                {peltierMode === "heating" ? "🔥 Heating" : "❄️ Cooling"}
-              </p>
+              <h4 className="font-medium text-foreground">Induction Heater</h4>
             </div>
           </div>
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Target</span>
+              <span className="text-muted-foreground">Set Temperature</span>
               <span className="font-mono text-sensor-temperature">
                 {temperatureSet[0]}°C
               </span>
@@ -154,28 +148,10 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
             <Slider
               value={temperatureSet}
               onValueChange={setTemperatureSet}
-              min={2}
-              max={50}
+              min={50}
+              max={350}
               step={1}
             />
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                variant={peltierMode === "heating" ? "default" : "outline"}
-                onClick={() => setPeltierMode("heating")}
-                className="flex-1 rounded-lg text-xs"
-              >
-                🔥 Heat
-              </Button>
-              <Button
-                size="sm"
-                variant={peltierMode === "cooling" ? "default" : "outline"}
-                onClick={() => setPeltierMode("cooling")}
-                className="flex-1 rounded-lg text-xs"
-              >
-                ❄️ Cool
-              </Button>
-            </div>
           </div>
         </div>
 
