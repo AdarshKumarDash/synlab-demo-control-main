@@ -22,6 +22,7 @@ export interface SensorData {
   blue?: number;
 
   objectTemp?: number;
+  ambientIRTemp?: number;
 
   emergency: boolean;
 }
@@ -60,6 +61,7 @@ export function useSensors() {
           blue: result.blue ?? 0,
 
           objectTemp: result.objectTemp ?? undefined,
+          ambientIRTemp: result.ambientIRTemp ?? undefined,
 
           emergency: result.emergency ?? false,
         });

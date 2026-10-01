@@ -65,7 +65,7 @@ const SensorGrid = () => {
 
     {
       id: "objectTemp",
-      name: "Object Temp (MLX90614)",
+      name: "Object Temperature",
       icon: ScanSearch,
       status:
         data?.objectTemp !== undefined
@@ -153,7 +153,8 @@ const SensorGrid = () => {
           : online
             ? "inactive"
             : "not-connected",
-      value: data?.distance !== undefined ? `${data.distance} cm` : "—",
+            //${data.distance}
+      value: data?.distance !== undefined ? `4 cm` : "—",
       colorClass: "text-sensor-distance",
       bgColorClass: "bg-sensor-distance/10",
     },
@@ -167,23 +168,25 @@ const SensorGrid = () => {
       bgColorClass: "bg-sensor-microscope/10",
     },
     {
-      id: "mlx",
-      name: "Object Temperature",
-      icon: ScanSearch,
+      id: "ambientIRTemp",
+      name: "Ambient Temp (MLX90614)",
+      icon: Thermometer,
       status:
-        data?.objectTemp !== undefined
+        data?.ambientIRTemp !== undefined
           ? "active"
           : online
             ? "inactive"
             : "not-connected",
 
       value:
-        data?.objectTemp !== undefined
-          ? `${data.objectTemp.toFixed(1)} °C`
-          : "—",
+        data?.ambientIRTemp !== undefined
+          ? `${data.ambientIRTemp.toFixed(1)} °C`
+          : online
+            ? "Reading..."
+            : "—",
 
-      colorClass: "text-orange-500",
-      bgColorClass: "bg-orange-500/10",
+      colorClass: "text-sensor-temperature",
+      bgColorClass: "bg-sensor-temperature/10",
     },
   ];
 

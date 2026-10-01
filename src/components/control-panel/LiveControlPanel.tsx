@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { setPumpState, stopExperiment } from "@/lib/api";
+import { setPumpState, setZVSState, stopExperiment } from "@/lib/api";
 import { useSensors } from "@/hooks/useSensors";
 
 import {
@@ -28,9 +28,7 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
   const { data, online } = useSensors();
   const [elapsedTime, setElapsedTime] = useState(0);
   const [waterFlow, setWaterFlow] = useState(experiment.waterSupply);
-  const [temperatureSet, setTemperatureSet] = useState([
-    experiment.heaterTemperature,
-  ]);
+  const [zvsOn, setZvsOn] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -128,31 +126,48 @@ const LiveControlPanel = ({ experiment, onStop }: LiveControlPanelProps) => {
           )}
         </div>
 
-        {/* Temperature Control */}
+        {/* ZVS Induction Heater Control */}
+
         <div className="sensor-card">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-sensor-temperature/10 flex items-center justify-center">
               <Thermometer className="w-5 h-5 text-sensor-temperature" />
             </div>
+            ```
             <div>
               <h4 className="font-medium text-foreground">Induction Heater</h4>
+              <p className="text-xs text-muted-foreground">
+                ZVS Manual Control
+              </p>
             </div>
+            ```
           </div>
-          <div className="space-y-3">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Set Temperature</span>
-              <span className="font-mono text-sensor-temperature">
-                {temperatureSet[0]}°C
-              </span>
-            </div>
-            <Slider
-              value={temperatureSet}
-              onValueChange={setTemperatureSet}
-              min={50}
-              max={350}
-              step={1}
+
+          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-xl">
+            <span className="text-sm text-foreground">
+              {zvsOn ? "Heating ON" : "Heating OFF"}
+            </span>
+            ```
+            <Switch
+              checked={zvsOn}
+              onCheckedChange={async (checked) => {
+                try {
+                  await setZVSState(checked ? "on" : "off");
+                  setZvsOn(checked);
+                } catch (error) {
+                  console.error("Failed to control ZVS:", error);
+                }
+              }}
             />
+            ```
           </div>
+
+          {zvsOn && (
+            <div className="mt-3 h-1 bg-muted rounded-full overflow-hidden">
+              {" "}
+              <div className="h-full w-full bg-sensor-temperature animate-pulse rounded-full" />{" "}
+            </div>
+          )}
         </div>
 
         {/* DHT11 Gauges */}

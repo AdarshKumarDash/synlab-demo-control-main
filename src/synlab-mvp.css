@@ -1,0 +1,542 @@
+/* ============================================================
+   SynLab MVP — modern laboratory control platform visual system
+   ------------------------------------------------------------
+   PRESENTATION ONLY. This file must never change behavior:
+   no API, state, routing, identifiers, or logic are touched here.
+   It only styles existing structure plus additive `.sl-*` shells.
+   ============================================================ */
+
+:root {
+  --sl-navy-950: #071224;
+  --sl-navy-900: #0a1930;
+  --sl-navy-800: #10254a;
+  --sl-ink: #0f1f38;
+  --sl-canvas-line: hsl(222 47% 18% / 0.05);
+  --sl-line: #d9e1ec;
+  --sl-accent: #0e7cd6;
+  --sl-accent-bright: #2aa9ee;
+  --sl-accent-cyan: #06a8c9;
+  --sl-ok: #15803d;
+  --sl-warn: #b45309;
+  --sl-bad: #dc2626;
+  --sl-navy-text: #f1f6fd;
+  --sl-navy-muted: #93a7c4;
+  --sl-navy-faint: rgba(255, 255, 255, 0.12);
+  --sl-radius: 10px;
+  --sl-radius-lg: 14px;
+}
+
+/* ============================================================
+   1. COMMAND HEADER — deep navy instrument bar (all pages)
+   Page <header> elements are direct children of the root div;
+   modal/sheet/menu headers live in portals and are unaffected.
+   ============================================================ */
+
+#root > div > header {
+  background: var(--sl-navy-900);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 -2px 0 rgba(6, 168, 201, 0.45);
+}
+
+/* Header descendant legibility on navy (existing classes untouched) */
+#root > div > header .text-foreground {
+  color: var(--sl-navy-text);
+}
+
+#root > div > header .text-muted-foreground {
+  color: var(--sl-navy-muted);
+}
+
+#root > div > header .text-primary {
+  color: var(--sl-accent-bright);
+}
+
+#root > div > header .border-border,
+#root > div > header .border-border\/50 {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+#root > div > header .bg-muted\/60,
+#root > div > header .bg-muted\/50,
+#root > div > header .bg-card\/90,
+#root > div > header .bg-card\/95 {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+#root > div > header .bg-primary\/10 {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+#root > div > header .border-primary\/20 {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+#root > div > header button:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+/* ============================================================
+   2. PRODUCT FRAME — navy footer bookend (all pages)
+   ============================================================ */
+
+#root > div > footer {
+  background: var(--sl-navy-900);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#root > div > footer .text-foreground,
+#root > div > footer .text-foreground\/80 {
+  color: var(--sl-navy-text);
+}
+
+#root > div > footer .text-muted-foreground,
+#root > div > footer .text-muted-foreground\/70 {
+  color: var(--sl-navy-muted);
+}
+
+#root > div > footer .bg-muted {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#root > div > footer .border-border {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+#root > div > footer a:hover {
+  color: #ffffff;
+}
+
+/* ============================================================
+   3. DASHBOARD CANVAS — faint technical grid behind telemetry
+   Only the dashboard main contains `.sensor-card`.
+   ============================================================ */
+
+main:has(.sensor-card) {
+  background-image:
+    linear-gradient(var(--sl-canvas-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sl-canvas-line) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+/* ============================================================
+   4. SECTION SYSTEM — hierarchy without generic card soup
+   `.sl-section` shells are additive wrappers; headers sit on
+   the page, content keeps its own surfaces.
+   ============================================================ */
+
+.sl-section {
+  scroll-margin-top: 76px;
+}
+
+.sl-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 2px 10px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--sl-line);
+}
+
+.sl-eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #33507a;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sl-meta {
+  font-size: 12px;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   5. HERO — experiment command deck (navy, dominant)
+   ============================================================ */
+
+.sl-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--sl-navy-900);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: clamp(20px, 3vw, 32px);
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 24px;
+  align-items: center;
+  box-shadow: 0 12px 32px -12px rgba(8, 20, 38, 0.45);
+}
+
+.sl-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(75% 95% at 18% 8%, black, transparent);
+}
+
+.sl-hero > * {
+  position: relative;
+}
+
+.sl-hero .sl-eyebrow {
+  color: #7fd4f7;
+}
+
+.sl-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+  animation: sl-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes sl-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.sl-hero-status {
+  margin: 10px 0 6px;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+}
+
+.sl-hero-status.is-running {
+  color: #4ade80;
+}
+
+.sl-hero-status.is-idle {
+  color: #9db1cc;
+}
+
+.sl-hero-title {
+  margin: 0;
+  color: #ffffff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.sl-hero-sub {
+  margin: 8px 0 0;
+  color: #a9bedb;
+  font-size: 14px;
+  line-height: 1.55;
+  max-width: 52ch;
+  overflow-wrap: anywhere;
+}
+
+/* Hero actions reuse the existing buttons; only context dressing here */
+.sl-hero-actions > div {
+  margin-bottom: 0;
+  justify-content: flex-end;
+}
+
+.sl-hero-actions .bg-primary {
+  background: var(--sl-accent-bright);
+  border-color: transparent;
+  min-height: 44px;
+  padding-left: 20px;
+  padding-right: 20px;
+  letter-spacing: 0.01em;
+}
+
+.sl-hero-actions .bg-primary:hover:not(:disabled) {
+  background: #4cbdf5;
+}
+
+.sl-hero-actions .bg-background {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  min-height: 44px;
+}
+
+.sl-hero-actions .bg-background:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.sl-hero-actions button:disabled {
+  opacity: 0.45;
+}
+
+/* ============================================================
+   6. SENSOR TELEMETRY — value-dominant instrument modules
+   DOM order is preserved; flex `order` only changes visuals:
+   label -> value -> status.
+   ============================================================ */
+
+.sl-sensors .sensor-card {
+  min-height: 0;
+  padding: 18px;
+  border-radius: 12px;
+  border-top-width: 2px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Icon tile compacts to a corner mark */
+.sl-sensors .sensor-card > div:first-child {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.sl-sensors .sensor-card > div:first-child svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Name becomes a small technical label */
+.sl-sensors .sensor-card h3 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.35;
+}
+
+.sl-sensors .sensor-card h3 + p {
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+  margin: 3px 0 0;
+}
+
+/* Value well becomes borderless and dominant */
+.sl-sensors .sensor-card .readout {
+  order: 4;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.sl-sensors .sensor-card .readout-value {
+  font-size: clamp(1.9rem, 2.4vw, 2.4rem);
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  line-height: 1.05;
+}
+
+/* Status line closes the module */
+.sl-sensors .sensor-card > div:nth-child(4) {
+  order: 5;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid hsl(var(--border));
+}
+
+/* ============================================================
+   7. LIVE EXPERIMENT — command area + standby state
+   The standby note hides itself (pure CSS) whenever live
+   modules are present inside the wrapper.
+   ============================================================ */
+
+.sl-standby {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: hsl(var(--muted-foreground));
+  background: hsl(var(--card));
+  border: 1px dashed var(--sl-line);
+  border-radius: var(--sl-radius);
+  padding: 16px 18px;
+}
+
+.sl-standby strong {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
+.sl-live-body:has(.sensor-card) .sl-standby {
+  display: none;
+}
+
+/* Active-experiment command card gets an authority rail */
+.sl-live-body > div > div:first-child {
+  border-left: 4px solid var(--sl-ok);
+}
+
+/* Stop control stays unmistakably dangerous and tappable */
+.sl-live .bg-destructive {
+  min-height: 44px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px -2px rgba(220, 38, 38, 0.5);
+}
+
+/* Safety block elevation (existing logic untouched) */
+.sl-live .border-l-accent {
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   8. SIGNAL + OBSERVATION sections
+   ============================================================ */
+
+.sl-signal .bg-card {
+  border-radius: 12px;
+}
+
+.sl-observe > :not(.sl-section-head) {
+  border-radius: 12px;
+  outline: 1px solid var(--sl-line);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   9. MODALS — premium focused setup workflow
+   dialog internals keep every field; only rhythm/typography
+   and CTA hierarchy are dressed here.
+   ============================================================ */
+
+[role="dialog"] {
+  border-radius: var(--sl-radius-lg);
+  border: 1px solid var(--sl-line);
+  box-shadow: 0 24px 64px -16px rgba(8, 20, 38, 0.35);
+}
+
+[role="dialog"] label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+[role="dialog"] input {
+  min-height: 44px;
+  border-radius: 8px;
+}
+
+[role="dialog"] .bg-primary {
+  min-height: 44px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* ============================================================
+   10. RESPONSIVE COMPOSITION
+   1440 / 1280 / 1024 / 768 / 480 / 390
+   ============================================================ */
+
+@media (min-width: 1440px) {
+  .sl-hero {
+    padding: 32px 36px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .sl-sensors .sensor-card .readout-value {
+    font-size: 2.1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .sl-hero {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .sl-hero-actions > div {
+    justify-content: stretch;
+  }
+
+  .sl-hero-actions button {
+    flex: 1 1 160px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sl-hero {
+    border-radius: var(--sl-radius-lg);
+    padding: 20px;
+  }
+
+  .sl-hero-title {
+    font-size: 1.35rem;
+  }
+
+  .sl-section-head {
+    margin-bottom: 12px;
+  }
+
+  .sl-meta {
+    display: none;
+  }
+
+  .sl-sensors .sensor-card {
+    padding: 16px;
+  }
+
+  .sl-sensors .sensor-card .readout-value {
+    font-size: 2rem;
+  }
+
+  .sl-live .bg-destructive {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .sl-hero-sub {
+    font-size: 13px;
+  }
+
+  .sl-sensors .sensor-card .readout-value {
+    font-size: 1.8rem;
+  }
+}
+
+/* ============================================================
+   11. MOTION DISCIPLINE — instrumentation, not decoration
+   ============================================================ */
+
+.sl-hero-actions button,
+.sl-section,
+.sl-standby {
+  transition:
+    background-color 180ms ease-out,
+    border-color 180ms ease-out,
+    box-shadow 180ms ease-out,
+    transform 80ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-pulse {
+    animation: none;
+  }
+
+  .sl-hero-actions button {
+    transition: none;
+  }
+}

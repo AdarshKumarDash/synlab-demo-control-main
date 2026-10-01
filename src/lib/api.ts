@@ -55,3 +55,14 @@ export async function setPumpState(state: "on" | "off") {
 
   await fetch(`${ESP32_BASE_URL}/pump?state=${state}`);
 }
+
+/* ================= ZVS INDUCTION HEATER ================= */
+export async function setZVSState(state: "on" | "off") {
+  console.log("ZVS request:", state);
+
+  const res = await fetch(`${ESP32_BASE_URL}/zvs?state=${state}`);
+
+  if (!res.ok) {
+    throw new Error("Failed to set ZVS state");
+  }
+}
